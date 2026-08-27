@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfólio de Rodrigo Dalfré, Video Editor" />
+  <title>Rodrigo Dalfré — Video Editor</title>
+
+  <style>
+    /* =========================================================
+       1) CORES DO SITE
+       Troque estas variáveis para alterar o visual inteiro.
+       ========================================================= */
+    :root {
+      --bg: #09090c;
+      --bg-soft: #101015;
+      --card: #111117;
+      --card-hover: #15151d;
+      --text: #f7f7f9;
+      --muted: #a4a4b0;
+      --line: rgba(255,255,255,.10);
+      --accent: #918cff;
+      --accent-soft: #c8c5ff;
+      --accent-glow: rgba(145,140,255,.22);
+      --max: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(145,140,255,.10), transparent 28%),
+        radial-gradient(circle at 82% 76%, rgba(145,140,255,.045), transparent 27%),
+        var(--bg);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    iframe, img { display: block; width: 100%; }
+
+    .wrap {
+      width: min(calc(100% - 40px), var(--max));
+      margin: 0 auto;
+    }
+
+    /* =========================================================
+       2) TOPO / NAVEGAÇÃO
+       ========================================================= */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+      backdrop-filter: blur(18px);
+      background: rgba(9,9,12,.76);
+    }
+
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-size: .88rem;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .brand-dot { color: var(--accent); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .nav-links a { transition: color .28s ease; }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Botão BR / EN. O fundo deslizante é movido via JS. */
+    .language-switch {
+      position: relative;
+      width: 94px;
+      height: 36px;
+      padding: 3px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+    }
+
+    .language-switch::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: calc(50% - 3px);
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #7470de);
+      box-shadow: 0 5px 18px rgba(145,140,255,.25);
+      transition: transform .38s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .language-switch[data-lang="en"]::before {
+      transform: translateX(44px);
+    }
+
+    .language-switch button {
+      position: relative;
+      z-index: 2;
+      border: 0;
+      background: transparent;
+      color: #858591;
+      cursor: pointer;
+      font: inherit;
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      transition: color .28s ease;
+    }
+
+    .language-switch button.active { color: white; }
+
+    /* =========================================================
+       3) HERO
+       Painel inicial mais limpo: apenas "Rodrigo Dalfré".
+       ========================================================= */
+    .hero {
+      min-height: 60vh;
+      display: grid;
+      align-items: center;
+      padding: 78px 0 64px;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(430px, 590px);
+      align-items: center;
+      justify-content: space-between;
+      column-gap: clamp(130px, 16vw, 250px);
+    }
+
+    /* No HERO, o container deixa de ficar preso ao max-width geral do site.
+       Assim o bloco de Rodrigo Dalfré fica realmente junto ao canto esquerdo,
+       enquanto a timeline continua respirando no lado direito. */
+    .hero .wrap {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding-left: 14px;
+      padding-right: 20px;
+    }
+
+    /* Mantém "Rodrigo Dalfré" preso ao lado esquerdo,
+       enquanto a timeline fica claramente separada do outro lado. */
+    .hero-left {
+      min-width: 0;
+      justify-self: start;
+    }
+
+    .hero-heading {
+      display: inline-flex;
+      flex-direction: column;
+    }
+
+    .hero-name {
+      margin: 0;
+      font-size: clamp(3.1rem, 7.1vw, 6.65rem);
+      line-height: .92;
+      letter-spacing: -.055em;
+      font-weight: 830;
+    }
+
+    /* Subtítulo profissional logo abaixo do nome. */
+    .hero-role {
+      margin-top: 12px;
+      color: var(--accent);
+      font-size: clamp(.82rem, 1.15vw, 1rem);
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: clamp(.98rem, 1.65vw, 1.08rem);
+    }
+
+    /* Timeline decorativa inspirada em software de edição.
+       Ela foi aproximada do título para ficar mais integrada. */
+    .timeline-strip {
+      width: 108%;
+      max-width: 590px;
+      justify-self: end;
+      opacity: .27;
+      transform: rotate(-1.5deg);
+      pointer-events: none;
+      filter: drop-shadow(0 15px 30px rgba(0,0,0,.35));
+    }
+
+    .timeline-row {
+      height: 27px;
+      display: flex;
+      gap: 5px;
+      margin-bottom: 7px;
+    }
+
+    .clip {
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: linear-gradient(90deg, #5d5ac7, #918cff);
+    }
+
+    .clip.alt { background: linear-gradient(90deg, #272730, #626173); }
+    .clip.light { background: linear-gradient(90deg, #9893fa, #c7c4ff); }
+
+    /* =========================================================
+       4) SEÇÕES GERAIS
+       ========================================================= */
+    section { padding: 70px 0; }
+
+    .section-head {
+      margin-bottom: 30px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .section-kicker {
+      margin-bottom: 7px;
+      color: var(--accent);
+      font-size: .74rem;
+      font-weight: 850;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4.3vw, 4rem);
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+
+    .section-note {
+      max-width: 390px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    /* =========================================================
+       5) VÍDEOS HORIZONTAIS
+       ========================================================= */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .video-card,
+    .short-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.025);
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+
+    .video-card:hover,
+    .short-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(145,140,255,.35);
+      background: rgba(255,255,255,.035);
+    }
+
+    .video-frame {
+      aspect-ratio: 16 / 9;
+      background: #0d0d12;
+    }
+
+    .video-frame iframe,
+    .short-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Título abaixo dos vídeos. As antigas etiquetas/tipos foram removidas. */
+    .video-meta {
+      min-height: 58px;
+      padding: 11px 15px 12px;
+      display: flex;
+      align-items: center;
+    }
+
+    .video-title {
+      font-size: .94rem;
+      font-weight: 760;
+      line-height: 1.28;
+    }
+
+    /* =========================================================
+       6) SHORTS / VÍDEOS VERTICAIS
+       ========================================================= */
+    .shorts-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 15px;
+      align-items: start;
+    }
+
+    .short-frame {
+      position: relative;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      background: #0e0e13;
+    }
+
+    /* TikTok pode exibir elementos próprios do player.
+       O overflow escondido mantém o card limpo. */
+    .short-frame iframe {
+      display: block;
+      background: #0e0e13;
+    }
+
+    .short-card .video-meta {
+      min-height: 92px;
+      align-items: flex-start;
+      padding: 14px;
+    }
+
+    .short-card .video-title {
+      font-size: .88rem;
+    }
+
+    /* =========================================================
+       7) CLIENTES / COLABORAÇÕES
+       Cada avatar usa uma bolinha circular.
+
+       PARA COLOCAR UMA FOTO REAL USANDO UM LINK:
+       mantenha a estrutura abaixo e troque apenas o valor de src:
+
+       <div class="client-avatar">
+         <img src="LINK_DA_IMAGEM_AQUI" alt="Nome do cliente">
+       </div>
+
+       Se ainda não tiver a imagem, pode deixar apenas as iniciais dentro
+       da div, como nos exemplos abaixo.
+       ========================================================= */
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 28px 18px;
+      padding-top: 8px;
+    }
+
+    .client-item {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .client-avatar {
+      width: 82px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      color: #efefff;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,.16), transparent 28%),
+        linear-gradient(145deg, #373457, #16151f 62%);
+      box-shadow: 0 10px 28px rgba(0,0,0,.28), 0 0 0 5px rgba(145,140,255,.035);
+      font-size: .92rem;
+      font-weight: 850;
+      letter-spacing: .04em;
+      transition: transform .22s ease, border-color .22s ease;
+    }
+
+    .client-item:hover .client-avatar {
+      transform: translateY(-3px);
+      border-color: rgba(145,140,255,.45);
+    }
+
+    .client-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .client-name {
+      margin-top: 12px;
+      color: #d0d0d8;
+      font-size: .87rem;
+      font-weight: 720;
+      line-height: 1.3;
+    }
+
+    /* =========================================================
+       8) CONTATO
+       ========================================================= */
+    .contact-box {
+      padding: clamp(28px, 4.5vw, 52px);
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 34px;
+      align-items: end;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(145,140,255,.16), transparent 30%),
+        rgba(255,255,255,.025);
+    }
+
+    .contact-title {
+      margin: 0 0 16px;
+      font-size: clamp(2.35rem, 5.5vw, 4.8rem);
+      line-height: .95;
+      letter-spacing: -.05em;
+    }
+
+    .contact-copy {
+      max-width: 600px;
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .contact-links {
+      display: grid;
+      gap: 9px;
+    }
+
+    .contact-link {
+      padding: 14px 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.022);
+      font-weight: 720;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .contact-link:hover {
+      border-color: rgba(145,140,255,.42);
+      background: rgba(145,140,255,.055);
+    }
+
+    .contact-link span:last-child {
+      color: var(--muted);
+      font-weight: 520;
+      text-align: right;
+    }
+
+    footer {
+      padding: 30px 0 42px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #777783;
+      font-size: .82rem;
+    }
+
+    /* Troca de idioma: dissolve o idioma atual e traz o novo de forma mais suave. */
+    [data-pt][data-en] {
+      transition:
+        opacity .48s cubic-bezier(.25, .8, .25, 1),
+        transform .52s cubic-bezier(.25, .8, .25, 1),
+        filter .52s cubic-bezier(.25, .8, .25, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    body.language-exiting [data-pt][data-en] {
+      opacity: 0;
+      transform: translateY(2px);
+      filter: blur(.7px);
+    }
+
+    body.language-entering [data-pt][data-en] {
+      opacity: 0;
+      transform: translateY(-2px);
+      filter: blur(.7px);
+    }
+
+    /* Animação discreta ao rolar. */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       9) RESPONSIVIDADE
+       ========================================================= */
+    @media (max-width: 1000px) {
+      .shorts-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .clients-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero-inner { grid-template-columns: minmax(0, .95fr) minmax(300px, 410px); column-gap: 64px; }
+      .timeline-strip { opacity: .18; }
+    }
+
+    @media (max-width: 820px) {
+      .nav-links { display: none; }
+      .video-grid { grid-template-columns: 1fr; }
+      .shorts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .contact-box { grid-template-columns: 1fr; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+      .hero-inner { grid-template-columns: 1fr; gap: 38px; }
+      .timeline-strip { width: min(100%, 460px); justify-self: end; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: min(calc(100% - 24px), var(--max)); }
+      .nav { min-height: 64px; }
+      .brand { font-size: .76rem; }
+      .nav-right { gap: 10px; }
+      .language-switch { width: 86px; height: 34px; }
+      .language-switch::before { height: 26px; }
+      .language-switch[data-lang="en"]::before { transform: translateX(40px); }
+
+      .hero { min-height: 58vh; padding-top: 62px; }
+      .hero .wrap { width: calc(100% - 24px); margin-left: 12px; margin-right: 12px; }
+      .hero-name { font-size: clamp(3rem, 15vw, 4.55rem); }
+      .timeline-strip { width: min(92%, 420px); opacity: .16; }
+
+      section { padding: 56px 0; }
+      .shorts-grid { gap: 11px; }
+      .clients-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 14px; }
+      .client-avatar { width: 74px; }
+      .contact-link { flex-direction: column; }
+      .contact-link span:last-child { text-align: left; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- =======================================================
+       MENU + SELETOR DE IDIOMA
+       O botão altera todos os textos que possuem data-pt e data-en.
+       ======================================================= -->
+  <header class="topbar">
+    <div class="wrap nav">
+      <a href="#inicio" class="brand">RODRIGO DALFRÉ<span class="brand-dot">.</span></a>
+
+      <div class="nav-right">
+        <nav class="nav-links" aria-label="Navegação principal">
+          <a href="#projetos" data-pt="Projetos" data-en="Projects">Projetos</a>
+          <a href="#shorts" data-pt="Shorts" data-en="Shorts">Shorts</a>
+          <a href="#clientes" data-pt="Colaborações" data-en="Collaborations">Colaborações</a>
+          <a href="#contato" data-pt="Contato" data-en="Contact">Contato</a>
+        </nav>
+
+        <!-- Botão BR / EN -->
+        <div class="language-switch" id="languageSwitch" data-lang="pt" aria-label="Selecionar idioma">
+          <button type="button" class="active" data-language="pt" aria-pressed="true">BR</button>
+          <button type="button" data-language="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+    <section class="hero" id="inicio">
+      <div class="wrap hero-inner">
+        <div class="hero-left">
+          <div class="hero-heading">
+            <h1 class="hero-name">Rodrigo Dalfré</h1>
+            <div class="hero-role">Video Editor</div>
+          </div>
+
+          <p
+            class="hero-copy"
+            data-pt="Vídeos construídos no detalhe: ritmo, clareza e escolhas de edição que fazem a história funcionar."
+            data-en="Videos built in the details: rhythm, clarity, and editing choices that make the story work."
+          >
+            Vídeos construídos no detalhe: ritmo, clareza e escolhas de edição que fazem a história funcionar.
+          </p>
+        </div>
+
+        <!-- Timeline decorativa: fica do lado oposto, com um respiro maior no meio. -->
+        <div class="timeline-strip" aria-hidden="true">
+          <div class="timeline-row">
+            <div class="clip light" style="width:18%"></div>
+            <div class="clip alt" style="width:26%"></div>
+            <div class="clip" style="width:34%"></div>
+            <div class="clip light" style="width:16%"></div>
+          </div>
+          <div class="timeline-row">
+            <div class="clip alt" style="width:30%"></div>
+            <div class="clip light" style="width:22%"></div>
+            <div class="clip alt" style="width:16%"></div>
+            <div class="clip" style="width:26%"></div>
+          </div>
+          <div class="timeline-row">
+            <div class="clip" style="width:15%"></div>
+            <div class="clip alt" style="width:40%"></div>
+            <div class="clip light" style="width:23%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         PROJETOS / VÍDEOS HORIZONTAIS
+
+         DICA PARA ADICIONAR OUTRO YOUTUBE:
+         use sempre a URL no formato:
+         https://www.youtube.com/embed/ID_DO_VIDEO
+         ===================================================== -->
+    <section id="projetos">
+      <div class="wrap">
+        <div class="section-head fade-up">
+          <div>
+            <div class="section-kicker" data-pt="Projetos selecionados" data-en="Selected projects">Projetos selecionados</div>
+            <h2 data-pt="Vídeos em destaque" data-en="Featured videos">Vídeos em destaque</h2>
+          </div>
+          <div
+            class="section-note"
+            data-pt="Alguns trabalhos em formato horizontal."
+            data-en="A few selected long-form projects."
+          >Alguns trabalhos em formato horizontal.</div>
+        </div>
+
+        <div class="video-grid">
+          <!-- VÍDEO 01 -->
+          <article class="video-card fade-up">
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube.com/embed/BrLSZ_a_DWs"
+                title="FINAL DO MAJOR! - FAZE x VITALITY - MELHORES MOMENTOS - MAJOR BUDAPESTE 2025"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title">FINAL DO MAJOR! - FAZE x VITALITY - MELHORES MOMENTOS - MAJOR BUDAPESTE 2025</div>
+            </div>
+          </article>
+
+          <!-- VÍDEO 02 -->
+          <article class="video-card fade-up">
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube.com/embed/ScTQS4NpQuQ"
+                title="TRAILER OFICIAL DE MADORA! UM ROGUELITE 3D e BRASILEIRO!"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title">TRAILER OFICIAL DE MADORA! UM ROGUELITE 3D e BRASILEIRO!</div>
+            </div>
+          </article>
+
+          <!-- VÍDEO 03 -->
+          <article class="video-card fade-up">
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube.com/embed/VF834SQ3vdI"
+                title="Madora - Testando um jogo Indie Brasileiro!"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title">Madora - Testando um jogo Indie Brasileiro!</div>
+            </div>
+          </article>
+
+          <!-- VÍDEO 04: deixado por último conforme pedido. -->
+          <article class="video-card fade-up">
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube.com/embed/JmgoQE2BKhM?si=EPnca1c4CU1GkSZx"
+                title="Why is Mordekaiser so strong?"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title">Why is Mordekaiser so strong?</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         SHORTS / VERTICAIS
+
+         TikTok: usamos o player oficial /player/v1/ID.
+         YouTube Shorts: usamos /embed/ID normalmente.
+         ===================================================== -->
+    <section id="shorts">
+      <div class="wrap">
+        <div class="section-head fade-up">
+          <div>
+            <div class="section-kicker" data-pt="Formato vertical" data-en="Vertical format">Formato vertical</div>
+            <h2>Shorts</h2>
+          </div>
+          <div
+            class="section-note"
+            data-pt="Uma seleção de vídeos verticais."
+            data-en="A selection of vertical edits."
+          >Uma seleção de vídeos verticais.</div>
+        </div>
+
+        <div class="shorts-grid">
+          <!-- SHORT 01: TikTok / Night Shift Studio -->
+          <article class="short-card fade-up">
+            <div class="short-frame">
+              <iframe
+                src="https://www.tiktok.com/player/v1/7621901680690466056"
+                title="O grande mistério de #daftpunk"
+                loading="lazy"
+                allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title" data-pt="O grande mistério de #daftpunk" data-en="The great mystery of #daftpunk">O grande mistério de #daftpunk</div>
+            </div>
+          </article>
+
+          <!-- SHORT 02: TikTok / Games Jabuticaba -->
+          <article class="short-card fade-up">
+            <div class="short-frame">
+              <iframe
+                src="https://www.tiktok.com/player/v1/7603774497908526356"
+                title="Você conhece Gustavo Rosseb?"
+                loading="lazy"
+                allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title" data-pt="Você conhece Gustavo Rosseb?" data-en="Do you know Gustavo Rosseb?">Você conhece Gustavo Rosseb?</div>
+            </div>
+          </article>
+
+          <!-- SHORT 03: YouTube Shorts -->
+          <article class="short-card fade-up">
+            <div class="short-frame">
+              <iframe
+                src="https://www.youtube.com/embed/tyX3KLsQGok"
+                title="O VERDADEIRO YUSUKE era MUITO MAIS REBELDE!"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title" data-pt="O VERDADEIRO YUSUKE era MUITO MAIS REBELDE!" data-en="The REAL YUSUKE was WAY MORE REBELLIOUS!">O VERDADEIRO YUSUKE era MUITO MAIS REBELDE!</div>
+            </div>
+          </article>
+
+          <!-- SHORT 04: TikTok / Games Jabuticaba -->
+          <article class="short-card fade-up">
+            <div class="short-frame">
+              <iframe
+                src="https://www.tiktok.com/player/v1/7662820751250099477"
+                title="Daniels jogando Madora"
+                loading="lazy"
+                allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div class="video-title" data-pt="Daniels jogando Madora" data-en="Daniels playing Madora">Daniels jogando Madora</div>
+            </div>
+          </article>
+
+          <!-- SHORT 05: TikTok / Games Jabuticaba -->
+          <article class="short-card fade-up">
+            <div class="short-frame">
+              <iframe
+                src="https://www.tiktok.com/player/v1/7499946514186390839"
+                title="O Balatro só existe porque o desenvolvedor não tava conseguindo jogar Rocket League!"
+                loading="lazy"
+                allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="video-meta">
+              <div
+                class="video-title"
+                data-pt="O Balatro só existe porque o desenvolvedor não tava conseguindo jogar ROCKET LEAGUE!"
+                data-en="Balatro only exists because its developer couldn't play ROCKET LEAGUE!"
+              >O Balatro só existe porque o desenvolvedor não tava conseguindo jogar ROCKET LEAGUE!</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CLIENTES & COLABORAÇÕES
+         As bolinhas abaixo são placeholders para foto de perfil.
+         ===================================================== -->
+    <section id="clientes">
+      <div class="wrap">
+        <div class="section-head fade-up">
+          <div>
+            <div class="section-kicker" data-pt="Experiência" data-en="Experience">Experiência</div>
+            <h2 data-pt="Clientes & Colaborações" data-en="Clients & Collaborations">Clientes & Colaborações</h2>
+          </div>
+          <div
+            class="section-note"
+            data-pt="Alguns criadores e projetos para os quais já editei."
+            data-en="Some creators and projects I've edited for."
+          >Alguns criadores e projetos para os quais já editei.</div>
+        </div>
+
+        <div class="clients-grid fade-up">
+          <div class="client-item">
+            <!-- Estúdio Jabuticaba: troque somente o src abaixo para mudar a foto. -->
+            <div class="client-avatar">
+              <img
+                src="https://p16-common-sign.tiktokcdn.com/tos-maliva-avt-0068/491f0a1a308735fabd22319496861619~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&amp;refresh_token=bbc780fc&amp;x-expires=1788037200&amp;x-signature=egmmsY3XNPMzfI4OnSykomASRAc%3D&amp;t=4d5b0474&amp;ps=13740610&amp;shp=a5d48078&amp;shcp=81f88b70&amp;idc=my3"
+                alt="Estúdio Jabuticaba"
+                loading="lazy"
+              >
+            </div>
+            <div class="client-name">Estúdio Jabuticaba<br>(Madora)</div>
+          </div>
+
+          <div class="client-item">
+            <!-- Daniels: troque somente o src abaixo para mudar a foto. -->
+            <div class="client-avatar">
+              <img
+                src="https://static-cdn.jtvnw.net/jtv_user_pictures/dc5515eb-160a-4f88-8583-1aa5f07da47e-profile_image-300x300.png"
+                alt="Daniels"
+                loading="lazy"
+              >
+            </div>
+            <div class="client-name">Daniels</div>
+          </div>
+
+          <div class="client-item">
+            <!-- Gaules: troque somente o src abaixo para mudar a foto. -->
+            <div class="client-avatar">
+              <img
+                src="https://yt3.googleusercontent.com/m6s3UkM_8f4233Ayxq2NEyeJNmSMjZen3aPVhAKRyigEKi-Gw_sUMXysRA_WLEyuwq1Pw1fOVg=s900-c-k-c0x00ffffff-no-rj"
+                alt="Gaules"
+                loading="lazy"
+              >
+            </div>
+            <div class="client-name">Gaules</div>
+          </div>
+
+          <div class="client-item">
+            <!-- Gustavo Rosseb: troque somente o src abaixo para mudar a foto. -->
+            <div class="client-avatar">
+              <img
+                src="https://p16-common-sign.tiktokcdn.com/tos-maliva-avt-0068/8cf9a4dca53204fecf2e6f2001253816~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&amp;refresh_token=694e0450&amp;x-expires=1788037200&amp;x-signature=a7ynL93s7MYWhrzWgtvMYiN4szY%3D&amp;t=4d5b0474&amp;ps=13740610&amp;shp=a5d48078&amp;shcp=81f88b70&amp;idc=my3"
+                alt="Gustavo Rosseb"
+                loading="lazy"
+              >
+            </div>
+            <div class="client-name">Gustavo Rosseb</div>
+          </div>
+
+          <div class="client-item">
+            <!-- DjokoLol: troque somente o src abaixo para mudar a foto. -->
+            <div class="client-avatar">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsxKFPy3aYmBRkxHQeqe9JlptFe5AN4DjLQTlhB20ht0ArOq88qeYHwXs&amp;s=10"
+                alt="DjokoLol"
+                loading="lazy"
+              >
+            </div>
+            <div class="client-name">DjokoLol</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CONTATO
+         ===================================================== -->
+    <section id="contato">
+      <div class="wrap">
+        <div class="contact-box fade-up">
+          <div>
+            <div class="section-kicker" data-pt="Contato" data-en="Contact">Contato</div>
+            <h2 class="contact-title" data-pt="Vamos trabalhar juntos." data-en="Let's work together.">Vamos trabalhar juntos.</h2>
+            <p
+              class="contact-copy"
+              data-pt="Para projetos, freelas e trabalhos recorrentes, fale comigo por email ou Discord."
+              data-en="For projects, freelance work, or ongoing editing, reach me by email or Discord."
+            >Para projetos, freelas e trabalhos recorrentes, fale comigo por email ou Discord.</p>
+          </div>
+
+          <div class="contact-links">
+            <a class="contact-link" href="mailto:rodrigodalfre@gmail.com">
+              <span>Email</span>
+              <span>rodrigodalfre@gmail.com</span>
+            </a>
+
+            <div class="contact-link">
+              <span>Discord</span>
+              <span>Elizabeto</span>
+            </div>
+          </div>
+        </div>
+
+        <footer>
+          <span>© <span id="year"></span> Rodrigo Dalfré</span>
+          <span>Video Editor Portfolio</span>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* =========================================================
+       10) JAVASCRIPT
+       ========================================================= */
+
+    /* Ano automático no rodapé. */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ---------------------------------------------------------
+       ANIMAÇÃO AO ROLAR
+       --------------------------------------------------------- */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.10 });
+
+    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+
+    /* ---------------------------------------------------------
+       SELETOR BR / EN
+
+       Para traduzir um novo texto, basta adicionar:
+       data-pt="Texto em português"
+       data-en="Text in English"
+
+       O conteúdo inicial deve ser o texto em português.
+       --------------------------------------------------------- */
+    const languageSwitch = document.getElementById('languageSwitch');
+    const languageButtons = languageSwitch.querySelectorAll('button[data-language]');
+    const translatedElements = document.querySelectorAll('[data-pt][data-en]');
+
+    function setLanguage(language) {
+      const isEnglish = language === 'en';
+      const currentLanguage = languageSwitch.dataset.lang;
+
+      if (currentLanguage === language) return;
+
+      /*
+         1) O texto desaparece suavemente.
+         2) O conteúdo é trocado enquanto está invisível.
+         3) O novo idioma entra com um movimento quase imperceptível.
+      */
+      document.body.classList.remove('language-entering');
+      document.body.classList.add('language-exiting');
+
+      setTimeout(() => {
+        document.documentElement.lang = isEnglish ? 'en' : 'pt-BR';
+        languageSwitch.dataset.lang = language;
+
+        translatedElements.forEach((element) => {
+          element.textContent = isEnglish ? element.dataset.en : element.dataset.pt;
+        });
+
+        languageButtons.forEach((button) => {
+          const active = button.dataset.language === language;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        document.body.classList.remove('language-exiting');
+        document.body.classList.add('language-entering');
+
+        /* Um pequeno intervalo antes do fade-in deixa a troca menos abrupta. */
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              document.body.classList.remove('language-entering');
+            }, 45);
+          });
+        });
+      }, 390);
+
+      /* Guarda a preferência enquanto a página estiver aberta/recarregada. */
+      try {
+        localStorage.setItem('portfolio-language', language);
+      } catch (error) {
+        /* Alguns navegadores podem bloquear localStorage em file://. */
+      }
+    }
+
+    languageButtons.forEach((button) => {
+      button.addEventListener('click', () => setLanguage(button.dataset.language));
+    });
+
+    /* Recupera o idioma salvo; se não houver, começa em português. */
+    let savedLanguage = 'pt';
+    try {
+      savedLanguage = localStorage.getItem('portfolio-language') || 'pt';
+    } catch (error) {
+      savedLanguage = 'pt';
+    }
+
+    setLanguage(savedLanguage === 'en' ? 'en' : 'pt');
+  </script>
+</body>
+</html>
